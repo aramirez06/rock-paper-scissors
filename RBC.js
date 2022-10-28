@@ -7,20 +7,22 @@ function computerChoice() {
     return randomChoice.toString();
 }
 
-function playerChoice(){
-    let choice = prompt("Rock, Paper, or Scissors? ")
-    if (choice === ''){
-        alert("choice must not be empty");
-        playerChoice();
-    }
-    if (choice === 'rock') {
-        return 'rock';
-    }else if(choice === 'paper') {
-        return 'paper';
-    }else {
-        return 'scissors';
-    };
-};
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        if(button.id === "rock"){
+            gameRound("rock", computerChoice());
+           
+        } else if (button.id === "paper") {
+            gameRound("paper", computerChoice());
+            
+        } else if (button.id === "scissor") {
+            gameRound("scissor", computerChoice());
+            
+        }
+    });
+});
 
 let win = 0;
 let loss = 0;
@@ -31,24 +33,51 @@ function gameRound(playerSelection, computerSelection){
     //determines the winner - Rock beats scissors, scissors beats paper, paper beats rock
     if (playerSelection === 'rock' && computerSelection === 'scissor' || playerSelection === 'paper' && computerSelection === 'rock' || playerSelection === 'scissor' && computerSelection === 'paper') {
         win++;
-        alert("Player wins!");
+        gamePlay();
     } else if (playerSelection === 'rock' && computerSelection === 'paper' || playerSelection === 'paper' && computerSelection === 'scissor' || playerSelection === 'scissor' && computerSelection === 'rock') {
         loss++;
-        alert("Player loses!");
+        gamePlay();
     } else {
         tie++;
-        alert("It's a tie~!");
+        gamePlay();
     }
 
 
 }
+
+const container = document.querySelector('#scores');
+const wins = document.createElement('div');
+const loses = document.createElement('div');
+const ties = document.createElement('div');
+
+wins.classList.add('wins');
+loses.classList.add('loses');
+ties.classList.add('ties');
+
+container.appendChild(wins);
+container.appendChild(loses);
+container.appendChild(ties);
 function gamePlay() {
-    for (let i=0; i<=5; i++) {
-        gameRound(playerChoice(), computerChoice());
-
+    wins.textContent = 'Wins: ' + win;
+    loses.textContent = 'Loses: ' + loss;
+    ties.textContent = 'Ties: ' + tie;
+    if (win === 5) {
+        gameOver();
+        alert("You are the winner!");
+    } else if (loss === 5) {
+        gameOver();
+        alert("You are the loser!");
+    } else if (tie === 5) {
+        gameOver();
+        alert("Tie game!");
     }
-    console.log(win,loss,tie);
+}
 
-};
+function gameOver() {
+    win = 0;
+    loss = 0;
+    tie = 0;
+}
 
-gamePlay();
+
+
